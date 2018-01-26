@@ -14,6 +14,8 @@ Return: csv file of prediction in the future y_windows days in output folder.
 
 Input variable:
 '--stock_no', type=int, default=1, 'stock Number on HKEX, e.g. for HK0001, input is 1.'
+'--start_date', type=int, default=20170101, 'start date of learning, format: YYYYMMDD.'
+'--end_date', type=int, default=20171231, 'end date of learning, format: YYYYMMDD.'
 '--x_windows', type=int, default=30, 'sliding Windows for input.'
 '--y_windows', type=int, default=3, 'sliding Windows for output.'
 '--split_ratio', type=float, default=0.8, help='cross Validation Ratio for Learning.'
