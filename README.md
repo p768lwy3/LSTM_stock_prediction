@@ -27,4 +27,4 @@ Input variable:
                              and plot a prediction curve'
 ```
 ## Disclaimer: </br>
-This is just For learning purposes and reference only. I shall not be responsible or liable for any loss of any kind incurred as a result of the use of the program.
+This is just for learning purposes and reference only. I shall not be responsible or liable for any loss of any kind incurred as a result of the use of the program.
