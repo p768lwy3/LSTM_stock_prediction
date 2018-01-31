@@ -7,6 +7,7 @@ from keras.optimizers import Adam
 import matplotlib.pyplot as plt, os
 from datetime import datetime
 
+"""
 def build_model(x_window_size, y_window_size, layer_num, hidden_dim, dr=0.01, lur=0.01, lr=0.01):
 
   model = Sequential()
@@ -25,6 +26,70 @@ def build_model(x_window_size, y_window_size, layer_num, hidden_dim, dr=0.01, lu
 
   #print(model.summary())
   return model
+"""
+
+def build_model(x_window_size, y_window_size, layer_num, hidden_dim, dr=0.01, lur=0.1, lr=0.01):
+  # This is the BLSTM MDN model
+  # c: the number of outputs we want to predict
+  # m: the number of distribution we want to use in the mixture
+  c = y_window_size
+  m = 1
+
+  def log_sum_exp(x, axis=None):
+    """Log-sum-exp trick implementation"""
+    x_max = K.max(x, axis=axis, keepdims=True)
+    return K.log(K.sum(K.exp(x - x_max),
+                      axis=axis, keepdims=True)) + x_max
+
+  def mean_log_Gaussian_like(y_true, params):
+    """Mean Log Gaussian Likelihood distribution"""
+    """Note: The 'c' variable is obtained as global variable"""
+    components = K.reshape(params, [-1, c+2, m])
+    mu = components[:, :c, :]
+    sigma = components[:, c, :]
+    alpha = components[:, c+1, :]
+    alpha = K.softmax(K.clip(alpha, 1e-8, 1.))
+
+    exponent = K.log(alpha) - .5*float(c)*K.log(2*np.pi) \
+              - float(c) * K.log(sigma) \
+              - K.sum(K.expand_dims((y_true,2)-mu)**2, axis=1)/(2*(sigma)**2)
+
+    log_gauss = log_sum_exp(exponent, axis=1)
+    res = -K.mean(log_gauss)
+    return res
+
+  def mean_log_LaPlace_like(y_true, params):
+    """Mean Log Laplace Likelihood distribution"""
+    """Note: The 'c' variable is obtained as global variable"""
+    components = K.reshape(params, [-1, c+2, m])
+    mu = components[:, :c, :]
+    sigma = components[:, c, :]
+    alpha = components[:, c+1, :]
+    alpha = K.softmax(K.clip(alpha, 1e-2, 1.))
+
+    exponent = K.log(alpha) - float(c)*K.log(2*sigma) \
+              - K.sum(K.abs(K.expand_dims(y_true,2)-mu), axis=1)/(sigma)
+
+    log_gauss = log_sum_exp(exponent, axis=1)
+    res = -K.mean(log_gauss)
+    return res
+
+  INPUTS = Input(shape=(x_window_size, 2))
+  BLSTM1 = Bidirectional(LSTM(128, activation='tanh', return_sequences=True))(INPUTS)
+  BLSTM2 = Bidirectional(LSTM(128, activation='tanh', return_sequences=True))(BLSTM1)
+  BLSTM3 = Bidirectional(LSTM(128, activation='tanh', return_sequences=False))(BLSTM2)
+  FC1 = Dense(128)(BLSTM3)
+  FC2 = Dense(64)(FC1)
+  LRU = LeakyReLU(lur)(FC2)
+  FC_mus = Dense(c*m)(LRU)
+  FC_sigmas = Dense(m, activation=K.exp, kernel_regularizer=l2(1e-3))(LRU)
+  FC_alphas = Dense(m, activation='softmax')(LRU)
+  OUTPUTS = concatenate([FC_mus, FC_sigmas, FC_alphas], axis=1)
+  MODEL = Model(INPUTS, OUTPUTS)
+  optimizer = Adam(lr=lr, epsilon=1e-04, decay=0.0)
+  MODEL.compile(optimizer=optimizer, loss=mean_log_LaPlace_like)
+  print(MODEL.summary())
+  return MODEL
 
 def model_path(stock_no):
   # model path format: 'model_stockno_date_weights_base.best.hdf5'
