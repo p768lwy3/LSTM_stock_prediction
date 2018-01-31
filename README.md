@@ -33,6 +33,13 @@ This is just for learning purposes and reference only. I shall not be responsibl
 
 ## Update: </br>
 I have try to apply the BLSTM MDN approach to take the benifit of having interval, but it seems have a long way to go. </br>
-The problem of the model may be about the Scalar Transform, or just fit not good?
+The problem of the model may be about the Scalar Transform? </br>
+Or, does the model just fit not good? </br>
+and the run.py haven't upadeted for the BLSTM MDN model. </br>
+
 ### Result of the BLSTM MDN </br>
 ![ResultofBLSTMMDN](https://github.com/p768lwy3/LSTM_stock_prediction/blob/master/pic/Evaluation_20180131%2023:02:14.040092.png)
+
+#### Todo:
+1. Try to make BLSTM MDN model better
+2. Try to apply Kernel Mixture Network, but this seems difficult...
