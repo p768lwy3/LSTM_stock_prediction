@@ -35,4 +35,4 @@ This is just for learning purposes and reference only. I shall not be responsibl
 I have try to apply the BLSTM MDN approach to take the benifit of having interval, but it seems have a long way to go. </br>
 The problem of the model may be about the Scalar Transform, or just fit not good?
 ### Result of the BLSTM MDN </br>
-https://github.com/p768lwy3/LSTM_stock_prediction/blob/master/pic/Evaluation_20180131%2023:02:14.040092.png
+![ResultofBLSTMMDN](https://github.com/p768lwy3/LSTM_stock_prediction/blob/master/pic/Evaluation_20180131%2023:02:14.040092.png)
