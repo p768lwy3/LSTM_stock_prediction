@@ -36,8 +36,8 @@ MODE = args['mode']
 
 # this should be added to input
 stock_no = tools.convert_int_to_string(stock_no)
-start = datetime.strptime(str(start), '%Y%d%m')
-end = datetime.strptime(str(end), '%Y%d%m')
+start = datetime.strptime(str(start), '%Y%m%d')
+end = datetime.strptime(str(end), '%Y%m%d')
 
 if __name__ == '__main__':
   if MODE == 'train':
