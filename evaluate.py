@@ -63,11 +63,11 @@ def evaluate(stock_no, start, end, x_window_size, y_window_size,
   print('  Start to plot the result...')
 
   train_pred = model.predict(X_train)
-  train_pred_mu = train_pred[:, 0:3]
-  train_pred_sd = train_pred[:, 4]
+  train_pred_mu = train_pred[:, 0:y_window_size]
+  train_pred_sd = train_pred[:, y_window_size]
   test_pred = model.predict(X_test)
-  test_pred_mu = test_pred[:, 0:3]
-  test_pred_sd = test_pred[:, 4]
+  test_pred_mu = test_pred[:, 0:y_window_size]
+  test_pred_sd = test_pred[:, y_window_size]
 
   train_pred_mu = tools.prediction_mean(train_pred_mu)
   test_pred_mu = tools.prediction_mean(test_pred_mu)
