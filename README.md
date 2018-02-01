@@ -40,6 +40,11 @@ and the run.py haven't upadeted for the BLSTM MDN model. </br>
 ### Result of the BLSTM MDN </br>
 ![ResultofBLSTMMDN](https://github.com/p768lwy3/LSTM_stock_prediction/blob/master/pic/Evaluation_20180131%2023:02:14.040092.png)
 
+### Solve: </br>
+OK. I have find the problem, which is really stupid, that I have write a wrong slice to get the alpha instead of sd... </br>
+So, the model is seems better now:
+![UpdateofBLSTMMDN](https://github.com/p768lwy3/LSTM_stock_prediction/blob/master/pic/Evaluation_20180201%2016:26:15.921615.png)
+
 #### Todo:
 1. Try to make BLSTM MDN model better
 2. Try to apply Kernel Mixture Network, but this seems difficult...
